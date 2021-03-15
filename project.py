@@ -8,19 +8,30 @@ class Project:
         self.size = size
         self.priority = priority
     
-    def getTitle():
+    def getTitle(self):
         return title
     
-    def getSize():
+    def getSize(self):
         return size
     
-    def getPriority():
+    def getPriority(self):
         return priority
 
-    def getOneProject(self, id):
+    def getOneProject(self, project_id):
         with open('projects.txt', 'r') as csv_file:
             projects = csv.reader(csv_file)
             next(projects)
             for row in projects:
-                if row[0] == id:
+                if(row[0] == project_id):
                     print(row[0])
+    
+    def getAllProjects(self):
+        project_list = []
+        
+        with open('projects.txt', 'r') as csv_file:
+            projects = csv.reader(csv_file)
+            next(projects)
+            for row in projects:
+                project_list.append(row)
+        
+        print(project_list)
