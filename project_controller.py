@@ -10,6 +10,19 @@ class ProjectController:
             cls.__instance = super(ProjectController, cls).__new__(cls)
         return cls.__instance
 
+    # Input Project methods
+    def inputProject(self):
+        with open('sample.txt', 'a', encoding='UTF8') as csv_file:
+            writer = csv.writer(csv_file)
+            id = input("Please enter project ID: ")
+            title = input("Please enter project Title: ")
+            size = input("Please enter number of pages: ")
+            priority = input("Please enter priority of the project\n[1 - highest and 10 - lowest]: ")
+
+            project = [id, title, size, priority]
+            writer.writerow(project)
+            
+
     # View Projects methods
     def getOneProject(self, project_id):
         with open('projects.txt', 'r') as csv_file:

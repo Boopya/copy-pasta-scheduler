@@ -12,14 +12,14 @@ print('5. Exit')
 choice = input('Enter your choice: ')
 
 if choice == '1':
-    # TODO
+    pass
 elif choice == '2':
-    # TODO
+    pass
 elif choice == '3':
-    # TODO
+    pass
 elif choice == '4':
-    # TODO
+    pass
 elif choice == '5':
-    # TODO
+    pass
 else:
-    # TODO
+    pass
