@@ -21,7 +21,7 @@ class ProjectController:
             if(os.stat("projects.txt").st_size == 0):
                 header = ['id', 'title', 'size', 'priority']
                 writer.writerow(header)
-                
+
             id = input("Project ID: ")
             title = input("Project Title: ")
             size = input("Number of pages: ")
@@ -29,6 +29,9 @@ class ProjectController:
 
             project = [id, title, size, priority]
             writer.writerow(project)
+        
+        os.system("CLS")
+        print("Project added.\n\n")
             
     # View Projects methods
     def getOneProject(self, project_id):
@@ -66,26 +69,40 @@ class ProjectController:
 
     # Schedule Projects methods
     def createSchedule(self):
-        project_queue = []
+        try:
+            project_queue = []
 
-        with open('projects.txt', 'r') as source, open('schedule.txt', 'w', newline='') as dest:
-            projects = csv.reader(source)
-            schedule = csv.writer(dest)
+            with open('projects.txt', 'r') as source, open('schedule.txt', 'w', newline='') as dest:
+                projects = csv.reader(source)
+                schedule = csv.writer(dest)
 
-            next(projects)
-            for row in projects:
-                # Structure: [Priority, Size, ID, Title]
-                temp = [int(row[3]), int(row[2]), int(row[0]), row[1]]
-                project_queue.append(temp)
+                next(projects)
+                for row in projects:
+                    # Structure: [Priority, Size, ID, Title]
+                    temp = [int(row[3]), int(row[2]), int(row[0]), row[1]]
+                    project_queue.append(temp)
 
-            project_queue.sort()
-            schedule.writerows(project_queue)
-
-        print("Schedule created. You can now view updated schedule.")
+                project_queue.sort()
+                ProjectController.project_queue = project_queue
+                schedule.writerows(project_queue)
+            
+            os.system("CLS")
+            print("Schedule created. You can now view updated schedule.\n\n")
+        except FileNotFoundError:
+            os.system("CLS")
+            print("Please input project first.\n\n")
 
     # Get a Project method
     def getAProject(self):
-        print('Project removed from the queue.')
-        with open('completed_projects.txt', 'a') as completed_projects:
-            project = ','.join(ProjectController.project_queue.pop(0))
-            completed_projects.write(project + '\n')
+        try:
+            completed_projects = open('completed_projects.txt', 'r')
+        except FileNotFoundError:
+            os.system("CLS")
+            print("Please create first a schedule.\n\n")
+        else:  
+            with open('completed_projects.txt', 'a') as completed_projects:
+                project = ','.join(ProjectController.project_queue.pop(0))
+                completed_projects.write(project + '\n')
+                
+            print('Project removed from the queue.')
+            print(ProjectController.project_queue)

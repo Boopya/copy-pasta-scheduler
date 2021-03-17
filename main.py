@@ -14,6 +14,7 @@ while True:
     if choice == '1':
         controller.inputProject()
     elif choice == '2a':
+        os.system("CLS")
         id = input("\nSearch by ID: ")
         project = controller.getOneProject(id)
         viewer.viewOneProject(project)
@@ -27,9 +28,12 @@ while True:
         controller.createSchedule()
     elif choice == '3b':
         viewer.viewUpdatedSchedule()
+    elif choice == '4':
+        controller.getAProject()
     elif choice == '5':
         break
     else:
+        os.system("CLS")
         print("Invalid input.\n\n")
 
     os.system("PAUSE")

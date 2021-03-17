@@ -1,4 +1,5 @@
 import csv
+import os
 
 class ViewProject:
     def viewMenu(self):
@@ -26,10 +27,11 @@ class ViewProject:
         try:
             file_object = open('schedule.txt', 'r')
             projects = csv.reader(file_object)
-            
+
             next(projects)
             for row in projects:
                 print(row)
             
         except FileNotFoundError:
-            print("Please create first a schedule.")
+            os.system("CLS")
+            print("Please create first a schedule.\n\n")
