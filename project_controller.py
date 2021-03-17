@@ -12,8 +12,9 @@ class ProjectController:
 
     # Input Project methods
     def inputProject(self):
-        with open('projects.txt', 'a', encoding='UTF8') as csv_file:
+        with open('projects.txt', 'a', newline='') as csv_file:
             writer = csv.writer(csv_file)
+
             id = input("Please enter project ID: ")
             title = input("Please enter project Title: ")
             size = input("Please enter number of pages: ")
