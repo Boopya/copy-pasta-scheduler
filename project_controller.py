@@ -1,4 +1,5 @@
 import csv
+import os
 from project import Project
 
 class ProjectController:
@@ -16,6 +17,11 @@ class ProjectController:
         with open('projects.txt', 'a', newline='') as csv_file:
             writer = csv.writer(csv_file)
 
+            # If projects.txt is empty, add header
+            if(os.stat("projects.txt").st_size == 0):
+                header = ['id', 'title', 'size', 'priority']
+                writer.writerow(header)
+                
             id = input("Project ID: ")
             title = input("Project Title: ")
             size = input("Number of pages: ")
@@ -68,13 +74,13 @@ class ProjectController:
 
             next(projects)
             for row in projects:
-                # Structure: [Priority, Size, ID] (for easy sorting)
+                # Structure: [Priority, Size, ID, Title]
                 temp = [int(row[3]), int(row[2]), int(row[0]), row[1]]
                 project_queue.append(temp)
 
             project_queue.sort()
             schedule.writerows(project_queue)
-            
+
         print("Schedule created. You can now view updated schedule.")
 
     # Get a Project method

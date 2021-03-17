@@ -30,7 +30,7 @@ while True:
     elif choice == '5':
         break
     else:
-        break
+        print("Invalid input.\n\n")
 
     os.system("PAUSE")
     os.system("CLS")
