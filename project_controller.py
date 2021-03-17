@@ -1,8 +1,10 @@
 import csv
+from project import Project
 
-class ProjectController:   
-    project_queue = [['69', 'Title 69', '69', '69']]
+class ProjectController:
     __instance = None
+    project_queue = []
+    schedule_created = False
 
     # Implemented as Singleton
     def __new__(cls):
@@ -15,15 +17,14 @@ class ProjectController:
         with open('projects.txt', 'a', newline='') as csv_file:
             writer = csv.writer(csv_file)
 
-            id = input("Please enter project ID: ")
-            title = input("Please enter project Title: ")
-            size = input("Please enter number of pages: ")
-            priority = input("Please enter priority of the project\n[1 - highest and 10 - lowest]: ")
+            id = input("Project ID: ")
+            title = input("Project Title: ")
+            size = input("Number of pages: ")
+            priority = input("Priority [1 - 10]: ")
 
             project = [id, title, size, priority]
             writer.writerow(project)
             
-
     # View Projects methods
     def getOneProject(self, project_id):
         with open('projects.txt', 'r') as csv_file:
@@ -31,7 +32,8 @@ class ProjectController:
             next(projects)
             for row in projects:
                 if(row[0] == project_id):
-                    print(row[0])
+                    # print(row)
+                    return(row)
     
     def getCompletedProjects(self):
         completed_projects = []
@@ -42,7 +44,8 @@ class ProjectController:
             for row in projects:
                 completed_projects.append(row)
         
-        print(completed_projects)
+        # print(completed_projects)
+        return(completed_projects)
 
     def getAllProjects(self):
         all_projects = []
@@ -53,7 +56,8 @@ class ProjectController:
             for row in projects:
                 all_projects.append(row)
         
-        print(all_projects)
+        # print(all_projects)
+        return(all_projects)
 
     # Schedule Projects methods
     def createSchedule(self):
@@ -61,11 +65,14 @@ class ProjectController:
             projects = csv.reader(csv_file)
             next(projects)
             for row in projects:
-                ProjectController.project_queue.append(row)
-            
+                # Structure: [Priority, Size, ID] (for easy sorting)
+                temp = [int(row[3]), int(row[2]), int(row[0]), row[1]]
+                ProjectController.project_queue.append(temp)
 
-    def viewUpdatedSchedule(self):
-        pass
+        ProjectController.project_queue.sort()
+        ProjectController.schedule_created = True
+        print("Schedule created. You can now view updated schedule.")
+        return ProjectController.project_queue
 
     # Get a Project method
     def getAProject(self):
