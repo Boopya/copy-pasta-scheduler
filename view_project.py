@@ -1,3 +1,5 @@
+import csv
+
 class ViewProject:
     def viewMenu(self):
         print('1. Input Project Details')
@@ -10,7 +12,7 @@ class ViewProject:
         print('\tb. View Schedule')
         print('4. Get a Project')
         print('5. Exit')
-        
+
     def viewOneProject(self, project):
         print(project)
 
@@ -20,5 +22,14 @@ class ViewProject:
     def viewAllProjects(self, projects):
         print(projects)
 
-    def viewUpdatedSchedule(self, queue):
-        print(queue)
+    def viewUpdatedSchedule(self):
+        try:
+            file_object = open('schedule.txt', 'r')
+            projects = csv.reader(file_object)
+            
+            next(projects)
+            for row in projects:
+                print(row)
+            
+        except FileNotFoundError:
+            print("Please create first a schedule.")

@@ -24,12 +24,9 @@ while True:
         project = controller.getAllProjects()
         viewer.viewAllProjects(project)
     elif choice == '3a':
-        schedule_queue = controller.createSchedule()
+        controller.createSchedule()
     elif choice == '3b':
-        if(controller.schedule_created is True):
-            viewer.viewUpdatedSchedule(schedule_queue)
-        else:
-            print("Please create first a schedule.")
+        viewer.viewUpdatedSchedule()
     elif choice == '5':
         break
     else:

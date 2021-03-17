@@ -4,7 +4,6 @@ from project import Project
 class ProjectController:
     __instance = None
     project_queue = []
-    schedule_created = False
 
     # Implemented as Singleton
     def __new__(cls):
@@ -61,18 +60,22 @@ class ProjectController:
 
     # Schedule Projects methods
     def createSchedule(self):
-        with open('projects.txt', 'r') as csv_file:
-            projects = csv.reader(csv_file)
+        project_queue = []
+
+        with open('projects.txt', 'r') as source, open('schedule.txt', 'w', newline='') as dest:
+            projects = csv.reader(source)
+            schedule = csv.writer(dest)
+
             next(projects)
             for row in projects:
                 # Structure: [Priority, Size, ID] (for easy sorting)
                 temp = [int(row[3]), int(row[2]), int(row[0]), row[1]]
-                ProjectController.project_queue.append(temp)
+                project_queue.append(temp)
 
-        ProjectController.project_queue.sort()
-        ProjectController.schedule_created = True
+            project_queue.sort()
+            schedule.writerows(project_queue)
+            
         print("Schedule created. You can now view updated schedule.")
-        return ProjectController.project_queue
 
     # Get a Project method
     def getAProject(self):
