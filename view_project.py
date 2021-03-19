@@ -17,7 +17,13 @@ class ViewProject:
         print('5. Exit')
 
     def viewOneProject(self, project):
-        print(project)
+        # project is not empty
+        if not not project:
+            os.system("CLS")
+            print(project)
+        else:
+            os.system("CLS")
+            print("No such project.\n\n")
 
     def viewCompletedProject(self, projects):
         # completed_projects.txt is not empty
@@ -42,18 +48,19 @@ class ViewProject:
             file_object = open('schedule.txt', 'r')
             projects = csv.reader(file_object)
 
+            os.system("CLS")
             next(projects)
             for row in projects:
-                print(row)
-            
+                print(row)  
         except FileNotFoundError:
             os.system("CLS")
             print("Please create first a schedule.\n\n")
 
+
     def viewChoiceInputError(self):
         os.system("CLS")
         print('If you have chosen View Projects/Schedule Projects,')
-        print('please combine the number choice with the letter choice')
+        print('please combine the number choice with the letter choice.')
         print('\n\nExample: 2a - will view one project\n\n''')
 
     def viewInvalidIdError(self):
@@ -72,3 +79,11 @@ class ViewProject:
         os.system("CLS")
         print("Confirm adding this Project?\n")
         print("\tProject ID: {}\n\tProject Title: {}\n\tNumber of pages: {}\n\tPriority: {}".format(id, title, size, priority))
+
+    def viewExistingIdError(self):
+        os.system("CLS")
+        print("Project with the same ID already exists.\nProject will not be added.\n\n")
+
+    def viewPoppedProject(self, id):
+        os.system("CLS")
+        print("Project with an ID number of {} has been added to completed projects.\n\n".format(id))

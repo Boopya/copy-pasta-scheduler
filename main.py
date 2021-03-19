@@ -9,7 +9,7 @@ schedule_queue = []
 
 while True:
     viewer.viewMenu()
-    choice = input('Enter your choice: ')
+    choice = input('\nEnter your choice: ')
 
     if choice == '1':
         controller.inputProject()
@@ -17,10 +17,17 @@ while True:
         viewer.viewChoiceInputError()
     elif choice == '2a':
         os.system("CLS")
-        id = input("Search by ID: ")
-        project = controller.getOneProject(id)
-        if project is not False:
-            viewer.viewOneProject(project)
+        while True:
+            id = input("Search by ID: ")
+            # Invalid ID input
+            if not controller.isValidNumber(id):
+                viewer.viewInvalidIdError()
+            else:
+                project = controller.getOneProject(id)
+                # project returns a list instead of a False value
+                if project is not False:
+                    viewer.viewOneProject(project)
+                break
     elif choice == '2b':
         project = controller.getCompletedProjects()
         # project returns a list instead of a False value
