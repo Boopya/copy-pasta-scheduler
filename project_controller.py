@@ -193,7 +193,7 @@ class ProjectController:
                     print("You have no pending projects, thus scheduling is not available.\n\n")
                 else:
                     schedule.writerows(project_queue)
-                    print("Lmao.\n\n")
+                    print("Schedule created. You can now view the schedule.\n\n")
         except FileNotFoundError:
             os.system("CLS")
             print("Please input project first.\n\n")
@@ -216,7 +216,7 @@ class ProjectController:
                     csv_file.seek(0, 0)
                     next(projects)
                     for row in projects:
-                        print(row)
+                        (row)print
         except FileNotFoundError:
             os.system("CLS")
             print("Please create first a schedule.\n\n")
@@ -257,34 +257,7 @@ class ProjectController:
 
                     # Update pending_projects.txt
                     self.updatePendingProjects(id)
-                    
-                    ###
-                    try:
-                        project_queue = []
-
-                        with open('pending_projects.txt', 'r') as source, open('schedule.txt', 'w', newline='') as dest:
-                            projects = csv.reader(source)
-                            schedule = csv.writer(dest)
-
-                            # If schedule.txt is empty, add header
-                            if(os.stat("schedule.txt").st_size == 0):
-                                header = ['priority', 'size', 'id', 'title']
-                                schedule.writerow(header)
-                            
-                            next(projects)
-                            for row in projects:
-                                # Structure: [Priority, Size, ID, Title]
-                                temp = [int(row[3]), int(row[2]), int(row[0]), row[1]]
-                                project_queue.append(temp)
-
-                            project_queue.sort()
-                            ProjectController.project_queue = project_queue
-                            os.system("CLS")
-                            schedule.writerows(project_queue)
-                    except FileNotFoundError:
-                        os.system("CLS")
-                        print("Please input project first.\n\n")
-                    ###
+                    self.recreateSchedule()
                     
             except FileNotFoundError:
                 os.system("CLS")
@@ -308,6 +281,33 @@ class ProjectController:
             writer = csv.writer(dest)
             writer.writerows(temp_list)
     
+    def recreateSchedule(self):
+        try:
+            project_queue = []
+
+            with open('pending_projects.txt', 'r') as source, open('schedule.txt', 'w', newline='') as dest:
+                projects = csv.reader(source)
+                schedule = csv.writer(dest)
+
+                # If schedule.txt is empty, add header
+                if(os.stat("schedule.txt").st_size == 0):
+                    header = ['priority', 'size', 'id', 'title']
+                    schedule.writerow(header)
+                
+                next(projects)
+                for row in projects:
+                    # Structure: [Priority, Size, ID, Title]
+                    temp = [int(row[3]), int(row[2]), int(row[0]), row[1]]
+                    project_queue.append(temp)
+
+                project_queue.sort()
+                ProjectController.project_queue = project_queue
+                schedule.writerows(project_queue)
+                self.viewUpdatedSchedule()
+
+        except FileNotFoundError:
+            os.system("CLS")
+            print("Please input project first.\n\n")
 
     # Validation methods
     def isValidNumber(self, id):
