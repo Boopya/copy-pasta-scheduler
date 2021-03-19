@@ -55,3 +55,20 @@ class ViewProject:
         print('If you have chosen View Projects/Schedule Projects,')
         print('please combine the number choice with the letter choice')
         print('\n\nExample: 2a - will view one project\n\n''')
+
+    def viewInvalidIdError(self):
+        print("Please input a valid ID.\n\n")
+
+    def viewInvalidSizeError(self):
+        print("Please input a valid number of pages.\n\n")
+    
+    def viewInvalidTitleError(self):
+        print("Please input the title of the project.\n\n")
+
+    def viewInvalidPriorityError(self):
+        print("Please input a valid priority.\n\n")
+
+    def viewConfirmInputDetails(self, id, title, size, priority):
+        os.system("CLS")
+        print("Confirm adding this Project?\n")
+        print("\tProject ID: {}\n\tProject Title: {}\n\tNumber of pages: {}\n\tPriority: {}".format(id, title, size, priority))

@@ -5,7 +5,7 @@ from view_project import ViewProject
 controller = ProjectController()
 viewer = ViewProject()
 
-# schedule_queue = []
+schedule_queue = []
 
 while True:
     viewer.viewMenu()

@@ -1,10 +1,12 @@
 import csv
 import os
 from project import Project
+from view_project import ViewProject
 
 class ProjectController:
     __instance = None
     project_queue = []
+    viewer = ViewProject()
 
     # Implemented as Singleton
     def __new__(cls):
@@ -22,17 +24,58 @@ class ProjectController:
                 header = ['id', 'title', 'size', 'priority']
                 writer.writerow(header)
 
-            id = input("Project ID: ")
-            title = input("Project Title: ")
-            size = input("Number of pages: ")
-            priority = input("Priority [1 - 10]: ")
+            os.system("CLS")
+            while True:
+                # Input ID
+                while True:
+                    id = input("Project ID: ")
+                    if not self.isValidNumber(id):
+                        self.viewer.viewInvalidIdError()
+                    else: break
+                # Input Title
+                while True:
+                    title = input("Project Title: ")
+                    if not self.isValidTitle(title):
+                        self.viewer.viewInvalidTitleError()
+                    else: break
+                # Input Number of Pages
+                while True:
+                    size = input("Number of pages: ")
+                    if not self.isValidNumber(size):
+                        self.viewer.viewInvalidSizeError()
+                    else: break
+                # Input Priority
+                while True:
+                    priority = input("Priority [1 - 10]: ")
+                    if not self.isValidNumber(priority) or int(priority) not in range(1, 11):
+                        self.viewer.viewInvalidPriorityError()
+                    else: break
 
-            project = [id, title, size, priority]
-            writer.writerow(project)
-        
-        os.system("CLS")
-        print("Project added.\n\n")
-            
+                self.viewer.viewConfirmInputDetails(id, title, size, priority)
+                choice = input("\nOptions:\n\t1 - Yes\n\tOther - No\n\nChoice: ")
+                if choice == '1':
+                    project = [id, title, size, priority]
+                    writer.writerow(project)
+
+                    os.system("CLS")
+                    print("Project added.\n\n")
+                else:
+                    os.system("CLS")
+                    print("Cancelled.\n\n")
+                break
+    
+    # Input Validation methods
+    def isValidNumber(self, num):
+        try:
+            num = int(num)
+        except ValueError:
+            return False
+        else:
+            return True
+
+    def isValidTitle(self, title):
+        return len(title) != 0
+
     # View Projects methods
     def getOneProject(self, project_id):
         try:
