@@ -58,5 +58,5 @@ while True:
         os.system("CLS")
         print("Invalid input.\n\n")
 
-    os.system("PAUSE")
+    input("Press enter to continue...")
     os.system("CLS")

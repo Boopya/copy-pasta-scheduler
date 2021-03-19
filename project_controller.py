@@ -92,7 +92,8 @@ class ProjectController:
         # project is not empty
         if project:
             os.system("CLS")
-            print(project)
+            print("Project details:\n\n\tProject ID: {}\n\tProject title: {}\n\tNumber of pages: {}\n\tPriority: {}\n"
+            .format(project[0], project[1], project[2], project[3]))
         else:
             os.system("CLS")
             print("No such project.\n\n")
@@ -101,7 +102,10 @@ class ProjectController:
         # completed_projects.txt is not empty
         if projects:
             os.system("CLS")
-            print(projects)
+            print("Completed Project details:\n")
+            for row in projects:
+                print("\tProject ID: {}\n\tProject title: {}\n\tNumber of pages: {}\n\tPriority: {}\n"
+            .format(row[0], row[1], row[2], row[3]))
         else:
             os.system("CLS")
             print("There's nothing here.\n\n")
@@ -110,7 +114,10 @@ class ProjectController:
         # projects.txt is not empty
         if projects:
             os.system("CLS")
-            print(projects)
+            print("All Project details:\n")
+            for row in projects:
+                print("\tProject ID: {}\n\tProject title: {}\n\tNumber of pages: {}\n\tPriority: {}\n"
+            .format(row[0], row[1], row[2], row[3]))
         else:
             os.system("CLS")
             print("There's nothing here.\n\n")
@@ -204,6 +211,7 @@ class ProjectController:
                 projects = csv.reader(csv_file)
 
                 os.system("CLS")
+                print("Current schedule:\n")
                 next(projects)
                 line = 1
                 for row in projects:
@@ -216,8 +224,10 @@ class ProjectController:
                     csv_file.seek(0, 0)
                     next(projects)
                     for row in projects:
-                        (row)print
-        except FileNotFoundError:
+                        print("\tPriority: {}\n\tProject ID: {}\n\tProject title: {}\n\tNumber of Pages: {}\n"
+                        .format(row[0], row[2], row[3], row[1]))
+                        
+        except(FileNotFoundError, StopIteration):
             os.system("CLS")
             print("Please create first a schedule.\n\n")
 
@@ -245,6 +255,7 @@ class ProjectController:
 
                     completed = [id, title, size, priority]
                     self.viewPoppedProject(id)
+                    input("Press enter to view updated schedule...")
 
                     # If completed_projects.txt is empty, add header
                     if(os.stat("completed_projects.txt").st_size == 0):
@@ -303,11 +314,11 @@ class ProjectController:
                 project_queue.sort()
                 ProjectController.project_queue = project_queue
                 schedule.writerows(project_queue)
-                self.viewUpdatedSchedule()
-
         except FileNotFoundError:
             os.system("CLS")
             print("Please input project first.\n\n")
+        finally:
+            self.viewUpdatedSchedule()
 
     # Validation methods
     def isValidNumber(self, id):

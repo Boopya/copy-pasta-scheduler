@@ -7,4 +7,4 @@ def viewConfirmInputDetails(id, title, size, priority):
 
 def viewPoppedProject(id):
     os.system("CLS")
-    print("Project with an ID number of {} has been added to completed projects. \nPlease see the updated schedule.\n\n".format(id))      
+    print("Project with an ID number of {} has been added to completed projects. \nPlease see the updated schedule.\n\n".format(id))    
