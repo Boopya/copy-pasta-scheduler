@@ -194,28 +194,15 @@ class ProjectController:
 
                 project_queue.sort()
                 ProjectController.project_queue = project_queue
-                schedule.writerows(project_queue)
-            
-            os.system("CLS")
-            print("Schedule created. You can now view schedule.\n\n")
+                os.system("CLS")
+                if len(project_queue) == 0:
+                    print("You have no pending projects, thus scheduling is not available.\n\n")
+                else:
+                    schedule.writerows(project_queue)
+                    print("Schedule created. You can now view schedule.\n\n")
         except FileNotFoundError:
             os.system("CLS")
             print("Please input project first.\n\n")
-
-    # # Get a Project method [ORIGINAL]
-    # def getAProject(self):
-    #     try:
-    #         completed_projects = open('completed_projects.txt', 'r')
-    #     except FileNotFoundError:
-    #         os.system("CLS")
-    #         print("Please create first a schedule.\n\n")
-    #     else:  
-    #         with open('completed_projects.txt', 'a') as completed_projects:
-    #             project = ','.join(ProjectController.project_queue.pop(0))
-    #             completed_projects.write(project + '\n')
-                
-    #         print('Project removed from the queue.')
-    #         print(ProjectController.project_queue)
 
     # Get a Project method
     def getAProject(self):
@@ -259,19 +246,39 @@ class ProjectController:
 
     # Method to update the pending_projects.txt
     def updatePendingProjects(self, id):
-        with open('pending_projects.txt', 'r') as source, open('temp.txt', 'w', newline='') as dest:
-            reader = csv.reader(source)
-            writer = csv.writer(dest)
-            for row in reader:
-                if row[0] != id:
-                    writer.writerow(row)
-        with open('temp.txt', 'r') as source, open('pending_projects.txt', 'w', newline='') as dest:
-            reader = csv.reader(source)
-            writer = csv.writer(dest)
-            for row in reader:
-                if row[0] != id:
-                    writer.writerow(row)
+        temp_list = []
 
-        os.remove('temp.txt')
+        id = str(id)
+        # Read pending_projects.txt to prepare for write
+        with open('pending_projects.txt', 'r') as source:
+            reader = csv.reader(source)
+            for row in reader:
+                if row[0] == id:
+                    continue
+                else:
+                    temp_list.append(row)
+
+        with open('pending_projects.txt', 'w', newline='') as dest:
+            writer = csv.writer(dest)
+            writer.writerows(temp_list)
+
+        # with open('pending_projects.txt', 'w') as dest:
+        #     dest.writelines(temp_list)
+
+        # with open('pending_projects.txt', 'r') as source, open('temp.txt', 'w', newline='') as dest:
+        #     reader = csv.reader(source)
+        #     writer = csv.writer(dest)
+        #     for row in reader:
+        #         if row[0] != id:
+        #             writer.writerow(row)
+
+        # with open('temp.txt', 'r') as source, open('pending_projects.txt', 'w', newline='') as dest:
+        #     reader = csv.reader(source)
+        #     writer = csv.writer(dest)
+        #     for row in reader:
+        #         if row[0] != id:
+        #             writer.writerow(row)
+
+        # os.remove('temp.txt')
 
             

@@ -45,17 +45,26 @@ class ViewProject:
 
     def viewUpdatedSchedule(self):
         try:
-            file_object = open('schedule.txt', 'r')
-            projects = csv.reader(file_object)
+            with open('schedule.txt', 'r') as csv_file:
+                projects = csv.reader(csv_file)
 
-            os.system("CLS")
-            next(projects)
-            for row in projects:
-                print(row)  
+                os.system("CLS")
+                next(projects)
+                line = 1
+                for row in projects:
+                    line += 1
+
+                # File is empty
+                if(line == 1):
+                    print("There's nothing here.\n\n")
+                else:
+                    csv_file.seek(0, 0)
+                    next(projects)
+                    for row in projects:
+                        print(row)
         except FileNotFoundError:
             os.system("CLS")
             print("Please create first a schedule.\n\n")
-
 
     def viewChoiceInputError(self):
         os.system("CLS")

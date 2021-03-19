@@ -1,4 +1,0 @@
-id,title,size,priority
-123,ABC Book,165,1
-114,Book of No One,414,4
-415,Another Book,2,1
