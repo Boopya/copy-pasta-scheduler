@@ -5,7 +5,7 @@ from view_project import ViewProject
 controller = ProjectController()
 viewer = ViewProject()
 
-schedule_queue = []
+# schedule_queue = []
 
 while True:
     viewer.viewMenu()
@@ -13,6 +13,8 @@ while True:
 
     if choice == '1':
         controller.inputProject()
+    elif choice == '2':
+        viewer.viewChoiceInputError()
     elif choice == '2a':
         os.system("CLS")
         id = input("Search by ID: ")
@@ -29,6 +31,8 @@ while True:
         # project returns a list instead of a False value
         if project is not False:
             viewer.viewAllProjects(project)
+    elif choice == '3':
+        viewer.viewChoiceInputError()
     elif choice == '3a':
         controller.createSchedule()
     elif choice == '3b':

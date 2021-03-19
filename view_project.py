@@ -49,3 +49,9 @@ class ViewProject:
         except FileNotFoundError:
             os.system("CLS")
             print("Please create first a schedule.\n\n")
+
+    def viewChoiceInputError(self):
+        os.system("CLS")
+        print('If you have chosen View Projects/Schedule Projects,')
+        print('please combine the number choice with the letter choice')
+        print('\n\nExample: 2a - will view one project\n\n''')
