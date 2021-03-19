@@ -15,12 +15,15 @@ while True:
         controller.inputProject()
     elif choice == '2a':
         os.system("CLS")
-        id = input("\nSearch by ID: ")
+        id = input("Search by ID: ")
         project = controller.getOneProject(id)
-        viewer.viewOneProject(project)
+        if project is not False:
+            viewer.viewOneProject(project)
     elif choice == '2b':
         project = controller.getCompletedProjects()
-        viewer.viewCompletedProject(project)
+        # project returns a list instead of a False value
+        if project is not False:
+            viewer.viewCompletedProject(project)
     elif choice == '2c':
         project = controller.getAllProjects()
         # project returns a list instead of a False value

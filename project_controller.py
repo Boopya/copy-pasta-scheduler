@@ -36,19 +36,23 @@ class ProjectController:
     # View Projects methods
     def getOneProject(self, project_id):
         try:
+            one_row = []
+
             with open('projects.txt', 'r') as csv_file:
                 projects = csv.reader(csv_file)
                 next(projects)
                 for row in projects:
                     if(row[0] == project_id):
-                        # print(row)
-                        return(row)
+                        one_row = row
+        # Returns a boolean value "False" if projects.txt is not yet created 
         except FileNotFoundError:
             os.system("CLS")
-            print("You haven't completed any projects yet.\n\n")
+            print("You haven't input any projects yet.\n\n")
             return False
+        # returns a list
+        else:
+            return one_row
 
-    
     def getCompletedProjects(self):
         try:
             completed_projects = []
@@ -58,8 +62,7 @@ class ProjectController:
                 next(projects)
                 for row in projects:
                     completed_projects.append(row)
-                    
-        # Returns a boolean value "False" if projects.txt is not yet created
+        # Returns a boolean value "False" if completed_projects.txt is not yet created
         except FileNotFoundError:
             os.system("CLS")
             print("You haven't completed any projects yet.\n\n")
@@ -77,10 +80,12 @@ class ProjectController:
                 next(projects)
                 for row in projects:
                     all_projects.append(row)
+        # Returns a boolean value "False" if projects.txt is not yet created
         except FileNotFoundError:
             os.system("CLS")
             print("You haven't input any projects yet.\n\n")
             return False
+        # returns a list
         else:
             return all_projects
 
