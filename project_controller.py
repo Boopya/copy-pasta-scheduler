@@ -35,37 +35,54 @@ class ProjectController:
             
     # View Projects methods
     def getOneProject(self, project_id):
-        with open('projects.txt', 'r') as csv_file:
-            projects = csv.reader(csv_file)
-            next(projects)
-            for row in projects:
-                if(row[0] == project_id):
-                    # print(row)
-                    return(row)
+        try:
+            with open('projects.txt', 'r') as csv_file:
+                projects = csv.reader(csv_file)
+                next(projects)
+                for row in projects:
+                    if(row[0] == project_id):
+                        # print(row)
+                        return(row)
+        except FileNotFoundError:
+            os.system("CLS")
+            print("You haven't completed any projects yet.\n\n")
+            return False
+
     
     def getCompletedProjects(self):
-        completed_projects = []
+        try:
+            completed_projects = []
 
-        with open('completed_projects.txt', 'r') as csv_file:
-            projects = csv.reader(csv_file)
-            next(projects)
-            for row in projects:
-                completed_projects.append(row)
-        
-        # print(completed_projects)
-        return(completed_projects)
+            with open('completed_projects.txt', 'r') as csv_file:
+                projects = csv.reader(csv_file)
+                next(projects)
+                for row in projects:
+                    completed_projects.append(row)
+                    
+        # Returns a boolean value "False" if projects.txt is not yet created
+        except FileNotFoundError:
+            os.system("CLS")
+            print("You haven't completed any projects yet.\n\n")
+            return False
+        # returns a list
+        else:
+            return(completed_projects)
 
     def getAllProjects(self):
-        all_projects = []
+        try:
+            all_projects = []
 
-        with open('projects.txt', 'r') as csv_file:
-            projects = csv.reader(csv_file)
-            next(projects)
-            for row in projects:
-                all_projects.append(row)
-        
-        # print(all_projects)
-        return(all_projects)
+            with open('projects.txt', 'r') as csv_file:
+                projects = csv.reader(csv_file)
+                next(projects)
+                for row in projects:
+                    all_projects.append(row)
+        except FileNotFoundError:
+            os.system("CLS")
+            print("You haven't input any projects yet.\n\n")
+            return False
+        else:
+            return all_projects
 
     # Schedule Projects methods
     def createSchedule(self):

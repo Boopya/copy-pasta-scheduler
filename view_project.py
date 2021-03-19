@@ -3,6 +3,8 @@ import os
 
 class ViewProject:
     def viewMenu(self):
+        os.system("CLS")
+
         print('1. Input Project Details')
         print('2. View Projects')
         print('\ta. One Project')
@@ -18,10 +20,22 @@ class ViewProject:
         print(project)
 
     def viewCompletedProject(self, projects):
-        print(projects)
+        # completed_projects.txt is not empty
+        if not not projects:
+            os.system("CLS")
+            print(projects)
+        else:
+            os.system("CLS")
+            print("There's nothing here.\n\n")
 
     def viewAllProjects(self, projects):
-        print(projects)
+        # projects.txt is not empty
+        if not not projects:
+            os.system("CLS")
+            print(projects)
+        else:
+            os.system("CLS")
+            print("There's nothing here.\n\n")
 
     def viewUpdatedSchedule(self):
         try:

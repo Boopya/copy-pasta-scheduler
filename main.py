@@ -23,7 +23,9 @@ while True:
         viewer.viewCompletedProject(project)
     elif choice == '2c':
         project = controller.getAllProjects()
-        viewer.viewAllProjects(project)
+        # project returns a list instead of a False value
+        if project is not False:
+            viewer.viewAllProjects(project)
     elif choice == '3a':
         controller.createSchedule()
     elif choice == '3b':
