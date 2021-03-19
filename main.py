@@ -1,49 +1,55 @@
 import os
 from project_controller import ProjectController
-from view_project import ViewProject
+
+def viewMenu():
+    os.system("CLS")
+
+    print('1. Input Project Details')
+    print('2. View Projects')
+    print('\ta. One Project')
+    print('\tb. Completed Projects')
+    print('\tc. All Projects')
+    print('3. Schedule Projects')
+    print('\ta. Create Schedule')
+    print('\tb. View Schedule')
+    print('4. Get a Project')
+    print('5. Exit')
 
 controller = ProjectController()
-viewer = ViewProject()
 
 schedule_queue = []
 
 while True:
-    viewer.viewMenu()
+    viewMenu()
     choice = input('\nEnter your choice: ')
 
     if choice == '1':
         controller.inputProject()
     elif choice == '2':
-        viewer.viewChoiceInputError()
+        controller.viewChoiceInputError()
     elif choice == '2a':
         os.system("CLS")
         while True:
             id = input("Search by ID: ")
             # Invalid ID input
             if not controller.isValidNumber(id):
-                viewer.viewInvalidIdError()
+                controller.viewInvalidIdError()
             else:
                 project = controller.getOneProject(id)
-                # project returns a list instead of a False value
-                if project is not False:
-                    viewer.viewOneProject(project)
+                controller.viewOneProject(project)
                 break
     elif choice == '2b':
-        project = controller.getCompletedProjects()
-        # project returns a list instead of a False value
-        if project is not False:
-            viewer.viewCompletedProject(project)
+        projects = controller.getCompletedProjects()
+        controller.viewCompletedProject(projects)
     elif choice == '2c':
         project = controller.getAllProjects()
-        # project returns a list instead of a False value
-        if project is not False:
-            viewer.viewAllProjects(project)
+        controller.viewAllProjects(project)
     elif choice == '3':
-        viewer.viewChoiceInputError()
+        controller.viewChoiceInputError()
     elif choice == '3a':
         controller.createSchedule()
     elif choice == '3b':
-        viewer.viewUpdatedSchedule()
+        controller.viewUpdatedSchedule()
     elif choice == '4':
         controller.getAProject()
     elif choice == '5':

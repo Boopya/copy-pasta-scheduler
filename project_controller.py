@@ -1,12 +1,13 @@
 import csv
 import os
+import validation
+import error
+import info
 from project import Project
-from view_project import ViewProject
 
 class ProjectController:
     __instance = None
     project_queue = []
-    viewer = ViewProject()
 
     # Class implemented as Singleton
     def __new__(cls):
@@ -48,33 +49,33 @@ class ProjectController:
                 while True:
                     id = input("Project ID: ")
                     if not self.isValidNumber(id):
-                        self.viewer.viewInvalidIdError()
+                        self.viewInvalidIdError()
                     else: break
                 # Input Title
                 while True:
                     title = input("Project Title: ")
                     if not self.isValidTitle(title):
-                        self.viewer.viewInvalidTitleError()
+                        self.viewInvalidTitleError()
                     else: break
                 # Input Number of Pages
                 while True:
                     size = input("Number of pages: ")
                     if not self.isValidNumber(size):
-                        self.viewer.viewInvalidSizeError()
+                        self.viewInvalidSizeError()
                     else: break
                 # Input Priority
                 while True:
                     priority = input("Priority [1 - 10]: ")
                     if not self.isValidNumber(priority) or int(priority) not in range(1, 11):
-                        self.viewer.viewInvalidPriorityError()
+                        self.viewInvalidPriorityError()
                     else: break
 
-                self.viewer.viewConfirmInputDetails(id, title, size, priority)
+                self.viewConfirmInputDetails(id, title, size, priority)
                 choice = input("\nOptions:\n\t1 - Yes\n\tOther - No\n\nChoice: ")
                 if choice == '1':
                     # Conflicting ID with another project
                     if not self.isUniqueId(id):
-                        self.viewer.viewExistingIdError()
+                        self.viewExistingIdError()
                     else:
                         project = [id, title, size, priority]
                         all_writer.writerow(project)
@@ -87,54 +88,48 @@ class ProjectController:
                     print("Cancelled.\n\n")
                 break
     
-    # Input Validation methods
-    def isValidNumber(self, num):
-        try:
-            num = int(num)
-        except ValueError:
-            return False
-        else:
-            return True
-
-    def isValidTitle(self, title):
-        return len(title) != 0
-
-    def isUniqueId(self, project_id):
-        try:
-            with open('projects.txt', 'r') as csv_file:
-                projects = csv.reader(csv_file)
-                next(projects)
-                for row in projects:
-                    if(row[0] == project_id):
-                        return False
-            return True
-        # Returns a boolean value "False" if projects.txt is not yet created 
-        except FileNotFoundError:
+    def viewOneProject(self, project):
+        # project is not empty
+        if project:
             os.system("CLS")
-            print("You haven't input any projects yet.\n\n")
-            return False
-        except StopIteration:
-            return True
+            print(project)
+        else:
+            os.system("CLS")
+            print("No such project.\n\n")
+
+    def viewCompletedProject(self, projects):
+        # completed_projects.txt is not empty
+        if projects:
+            os.system("CLS")
+            print(projects)
+        else:
+            os.system("CLS")
+            print("There's nothing here.\n\n")
+
+    def viewAllProjects(self, projects):
+        # projects.txt is not empty
+        if projects:
+            os.system("CLS")
+            print(projects)
+        else:
+            os.system("CLS")
+            print("There's nothing here.\n\n")
             
     # View Projects methods
     def getOneProject(self, project_id):
         try:
-            one_row = []
-
             with open('projects.txt', 'r') as csv_file:
                 projects = csv.reader(csv_file)
                 next(projects)
                 for row in projects:
                     if(row[0] == project_id):
-                        one_row = row
+                        return row
+                return False 
         # Returns a boolean value "False" if projects.txt is not yet created 
         except FileNotFoundError:
             os.system("CLS")
             print("You haven't input any projects yet.\n\n")
             return False
-        # returns a list
-        else:
-            return one_row
 
     def getCompletedProjects(self):
         try:
@@ -145,14 +140,13 @@ class ProjectController:
                 next(projects)
                 for row in projects:
                     completed_projects.append(row)
+                return completed_projects
+
         # Returns a boolean value "False" if completed_projects.txt is not yet created
         except FileNotFoundError:
             os.system("CLS")
             print("You haven't completed any projects yet.\n\n")
-            return False
-        # returns a list
-        else:
-            return(completed_projects)
+            return False            
 
     def getAllProjects(self):
         try:
@@ -163,14 +157,14 @@ class ProjectController:
                 next(projects)
                 for row in projects:
                     all_projects.append(row)
+                return all_projects
+
         # Returns a boolean value "False" if projects.txt is not yet created
         except FileNotFoundError:
             os.system("CLS")
             print("You haven't input any projects yet.\n\n")
             return False
-        # returns a list
-        else:
-            return all_projects
+            
 
     # Schedule Projects methods
     def createSchedule(self):
@@ -199,10 +193,33 @@ class ProjectController:
                     print("You have no pending projects, thus scheduling is not available.\n\n")
                 else:
                     schedule.writerows(project_queue)
-                    print("Schedule created. You can now view schedule.\n\n")
+                    print("Lmao.\n\n")
         except FileNotFoundError:
             os.system("CLS")
             print("Please input project first.\n\n")
+
+    def viewUpdatedSchedule(self):
+        try:
+            with open('schedule.txt', 'r') as csv_file:
+                projects = csv.reader(csv_file)
+
+                os.system("CLS")
+                next(projects)
+                line = 1
+                for row in projects:
+                    line += 1
+
+                # File is empty
+                if(line == 1):
+                    print("There's nothing here.\n\n")
+                else:
+                    csv_file.seek(0, 0)
+                    next(projects)
+                    for row in projects:
+                        print(row)
+        except FileNotFoundError:
+            os.system("CLS")
+            print("Please create first a schedule.\n\n")
 
     # Get a Project method
     def getAProject(self):
@@ -227,7 +244,7 @@ class ProjectController:
                     priority = ProjectController.project_queue[0][0]
 
                     completed = [id, title, size, priority]
-                    self.viewer.viewPoppedProject(id)
+                    self.viewPoppedProject(id)
 
                     # If completed_projects.txt is empty, add header
                     if(os.stat("completed_projects.txt").st_size == 0):
@@ -240,6 +257,35 @@ class ProjectController:
 
                     # Update pending_projects.txt
                     self.updatePendingProjects(id)
+                    
+                    ###
+                    try:
+                        project_queue = []
+
+                        with open('pending_projects.txt', 'r') as source, open('schedule.txt', 'w', newline='') as dest:
+                            projects = csv.reader(source)
+                            schedule = csv.writer(dest)
+
+                            # If schedule.txt is empty, add header
+                            if(os.stat("schedule.txt").st_size == 0):
+                                header = ['priority', 'size', 'id', 'title']
+                                schedule.writerow(header)
+                            
+                            next(projects)
+                            for row in projects:
+                                # Structure: [Priority, Size, ID, Title]
+                                temp = [int(row[3]), int(row[2]), int(row[0]), row[1]]
+                                project_queue.append(temp)
+
+                            project_queue.sort()
+                            ProjectController.project_queue = project_queue
+                            os.system("CLS")
+                            schedule.writerows(project_queue)
+                    except FileNotFoundError:
+                        os.system("CLS")
+                        print("Please input project first.\n\n")
+                    ###
+                    
             except FileNotFoundError:
                 os.system("CLS")
                 print("Please create first a schedule.\n\n")
@@ -261,24 +307,40 @@ class ProjectController:
         with open('pending_projects.txt', 'w', newline='') as dest:
             writer = csv.writer(dest)
             writer.writerows(temp_list)
+    
 
-        # with open('pending_projects.txt', 'w') as dest:
-        #     dest.writelines(temp_list)
+    # Validation methods
+    def isValidNumber(self, id):
+        return validation.isValidNumber(id)
 
-        # with open('pending_projects.txt', 'r') as source, open('temp.txt', 'w', newline='') as dest:
-        #     reader = csv.reader(source)
-        #     writer = csv.writer(dest)
-        #     for row in reader:
-        #         if row[0] != id:
-        #             writer.writerow(row)
+    def isValidTitle(self, title):
+        return validation.isValidTitle(title)
 
-        # with open('temp.txt', 'r') as source, open('pending_projects.txt', 'w', newline='') as dest:
-        #     reader = csv.reader(source)
-        #     writer = csv.writer(dest)
-        #     for row in reader:
-        #         if row[0] != id:
-        #             writer.writerow(row)
+    def isUniqueId(self, project_id):
+        return validation.isUniqueId(project_id)
 
-        # os.remove('temp.txt')
-
-            
+    # Error messages methods
+    def viewChoiceInputError(self):
+        error.viewChoiceInputError()
+    
+    def viewInvalidIdError(self):
+        error.viewInvalidIdError()
+    
+    def viewInvalidSizeError(self):
+        error.viewInvalidSizeError()
+    
+    def viewInvalidTitleError(self):
+        error.viewInvalidTitleError()
+    
+    def viewInvalidPriorityError(self):
+        error.viewInvalidPriorityError()
+    
+    def viewExistingIdError(self):
+        error.viewExistingIdError()
+    
+    # Informational messages methods
+    def viewConfirmInputDetails(self, id, title, size, priority):
+        info.viewConfirmInputDetails(id, title, size, priority)
+    
+    def viewPoppedProject(self, id):
+        info.viewPoppedProject(id)
