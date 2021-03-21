@@ -3,7 +3,6 @@ import os
 import validation
 import error
 import info
-from project import Project
 
 class ProjectController:
     __instance = None
